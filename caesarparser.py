@@ -2,6 +2,13 @@ import json
 from typing import Iterable, Any
 import re
 
+# function to merge two dictionaries, executin the merge function on the values when a key is present in both dictionaries
+def _merge_two_dicts(x, y, merge_function):
+    z = x.copy()
+    z.update(y)
+    for key in set(x).intersection(y):
+        z[key] = merge_function(x[key], y[key])
+    return z
 
 class CaesarParser:
     """
@@ -25,7 +32,7 @@ class CaesarParser:
                     field = item["values"][field_id]["value"]
                     if caption == "Waarde":
                         field = _remove_prefix_code(field)
-                    education.update({caption: field})
+                    education = _merge_two_dicts(education, {caption: field}, lambda x, y: x +y)
             educations.append(education)
         return educations
 
