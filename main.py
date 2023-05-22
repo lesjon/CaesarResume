@@ -1,4 +1,4 @@
-from dotenv import load_dotenv
+import dotenv
 import os
 import json
 from typing import Any
@@ -6,7 +6,7 @@ from typing import Any
 from caesarconnection import CaesarAPI
 from caesarparser import CaesarParser
 
-load_dotenv()
+dotenv.load_dotenv()
 url = "https://portal.caesar.nl/api2"
 username = os.getenv("USERNAME")
 password = os.getenv("PASSWORD")
@@ -15,6 +15,7 @@ password = os.getenv("PASSWORD")
 def store_characteristics_lists(characteristics_lists: dict[str, Any]) -> None:
     with open("characteristics.json", "w") as json_out:
         json.dump(characteristics_lists, json_out)
+
 
 def main():
     session = CaesarAPI(url, username, password)
@@ -59,6 +60,7 @@ def main():
     development_lists = session.get_development()
     for item in parser.parse_charachteristics_lists(development_lists):
         print(f"item: {item}")
+
 
 if __name__ == "__main__":
     main()
