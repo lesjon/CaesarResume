@@ -1,4 +1,3 @@
-import os
 import boto3
 
 def save_file(file_name, data):
