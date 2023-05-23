@@ -1,4 +1,4 @@
-# CaesarResume
+# CaesarResume ![build](https://github.com/lesjon/CaesarResume/actions/workflows/docker-image.yml/badge.svg?branch=main)
 Get fields from the resume api to build custom display from the fields
 # Authentication
 create a `.env` file with your credentials to get your info:
