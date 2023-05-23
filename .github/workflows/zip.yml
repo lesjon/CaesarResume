@@ -1,0 +1,22 @@
+name: Zip project
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+    
+jobs:
+  zip_and_upload:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Zip project files
+      run: zip -r CaesarResume.zip .
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: zipped-project
+        path: CaesarResume.zip
