@@ -16,6 +16,9 @@ jobs:
       run: |
         mkdir dist
         cp *.{py,txt} dist
+    - name: install AWS lambda requirements
+      run: |
+        pip install -r requirements_aws.txt --target dist
     - name: Upload artifact
       uses: actions/upload-artifact@v3
       with:
