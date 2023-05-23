@@ -5,11 +5,22 @@ from typing import Any
 
 from caesarconnection import CaesarAPI
 from caesarparser import CaesarParser
+import aws_secret
 
-dotenv.load_dotenv()
-url = "https://portal.caesar.nl/api2"
-username = os.getenv("USERNAME")
-password = os.getenv("PASSWORD")
+API_PATH = "https://portal.caesar.nl/api2"
+
+
+def load_credentials() -> tuple[str, str]:
+    """
+    Get the credentials from the .env file, environment variables or from the aws secret manager
+    """
+    dotenv.load_dotenv()
+    username = os.getenv("USERNAME")
+    password = os.getenv("PASSWORD")
+    if username and password:
+        return {'username': username, 'password': password}
+    else:
+        return aws_secret.get_secret()
 
 
 def store_characteristics_lists(characteristics_lists: dict[str, Any]) -> None:
@@ -17,48 +28,105 @@ def store_characteristics_lists(characteristics_lists: dict[str, Any]) -> None:
         json.dump(characteristics_lists, json_out)
 
 
+def get_parsed_education(
+    session: CaesarAPI, parser: CaesarParser
+) -> list[dict[str, str]]:
+    characteristics_lists = session.get_education()
+    return [item for item in parser.parse_charachteristics_lists(characteristics_lists)]
+
+def get_parsed_competences(
+    session: CaesarAPI, parser: CaesarParser
+) -> list[dict[str, str]]:
+    characteristics_lists = session.get_competences()
+    return [item for item in parser.parse_charachteristics_lists(characteristics_lists)]
+
+def get_parsed_databases(
+    session: CaesarAPI, parser: CaesarParser
+) -> list[dict[str, str]]:
+    characteristics_lists = session.get_databases()
+    return [item for item in parser.parse_charachteristics_lists(characteristics_lists)]
+
+def get_parsed_activities(
+    session: CaesarAPI, parser: CaesarParser
+) -> list[dict[str, str]]:
+    characteristics_lists = session.get_activities()
+    return [item for item in parser.parse_charachteristics_lists(characteristics_lists)]
+
+def get_parsed_experiences(
+    session: CaesarAPI, parser: CaesarParser
+) -> list[dict[str, str]]:
+    characteristics_lists = session.get_experiences()
+    return [item for item in parser.parse_charachteristics_lists(characteristics_lists)]
+
+def get_parsed_os(
+    session: CaesarAPI, parser: CaesarParser
+) -> list[dict[str, str]]:
+    characteristics_lists = session.get_os()
+    return [item for item in parser.parse_charachteristics_lists(characteristics_lists)]
+
+def get_parsed_packages(
+    session: CaesarAPI, parser: CaesarParser
+) -> list[dict[str, str]]:
+    characteristics_lists = session.get_packages()
+    return [item for item in parser.parse_charachteristics_lists(characteristics_lists)]
+
+def get_parsed_technologies(
+    session: CaesarAPI, parser: CaesarParser
+) -> list[dict[str, str]]:
+    characteristics_lists = session.get_technologies()
+    return [item for item in parser.parse_charachteristics_lists(characteristics_lists)]
+
+def get_parsed_methods(
+    session: CaesarAPI, parser: CaesarParser
+) -> list[dict[str, str]]:
+    characteristics_lists = session.get_methods()
+    return [item for item in parser.parse_charachteristics_lists(characteristics_lists)]
+
+def get_parsed_methods(
+    session: CaesarAPI, parser: CaesarParser
+) -> list[dict[str, str]]:
+    characteristics_lists = session.get_methods()
+    return [item for item in parser.parse_charachteristics_lists(characteristics_lists)]
+
+def get_parsed_development(
+    session: CaesarAPI, parser: CaesarParser
+) -> list[dict[str, str]]:
+    characteristics_lists = session.get_development()
+    return [item for item in parser.parse_charachteristics_lists(characteristics_lists)]
+
 def main():
-    session = CaesarAPI(url, username, password)
+    credentials = load_credentials()
+    session = CaesarAPI(API_PATH, credentials)
     parser = CaesarParser()
     print("Education and Courses")
-    characteristics_lists = session.get_education()
-    for item in parser.parse_charachteristics_lists(characteristics_lists):
+    for item in get_parsed_education(session, parser):
         print(f"item: {item}")
     print("Competences")
-    characteristics_lists = session.get_competences()
-    for item in parser.parse_charachteristics_lists(characteristics_lists):
+    for item in get_parsed_competences(session, parser):
         print(f"item: {item}")
     print("Databases")
-    characteristics_lists = session.get_databases()
-    for item in parser.parse_charachteristics_lists(characteristics_lists):
+    for item in get_parsed_databases(session, parser):
         print(f"item: {item}")
     print("Activities")
-    characteristics_lists = session.get_activities()
-    for item in parser.parse_charachteristics_lists(characteristics_lists):
+    for item in get_parsed_activities(session, parser):
         print(f"item: {item}")
     print("Experiences")
-    experience_lists = session.get_experiences()
-    for item in parser.parse_charachteristics_lists(experience_lists):
+    for item in get_parsed_experiences(session, parser):
         print(f"item: {item}")
     print("OS")
-    os_lists = session.get_os()
-    for item in parser.parse_charachteristics_lists(os_lists):
+    for item in get_parsed_os(session, parser):
         print(f"item: {item}")
     print("Packages")
-    package_lists = session.get_packages()
-    for item in parser.parse_charachteristics_lists(package_lists):
+    for item in get_parsed_packages(session, parser):
         print(f"item: {item}")
     print("Technologies")
-    technology_lists = session.get_technologies()
-    for item in parser.parse_charachteristics_lists(technology_lists):
+    for item in get_parsed_technologies(session, parser):
         print(f"item: {item}")
     print("Methods")
-    method_lists = session.get_methods()
-    for item in parser.parse_charachteristics_lists(method_lists):
+    for item in get_parsed_methods(session, parser):
         print(f"item: {item}")
     print("Development")
-    development_lists = session.get_development()
-    for item in parser.parse_charachteristics_lists(development_lists):
+    for item in get_parsed_development(session, parser):
         print(f"item: {item}")
 
 

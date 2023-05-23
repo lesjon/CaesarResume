@@ -19,22 +19,19 @@ class CaesarAPI:
     EDUCATION_X_MENU = "9140"
     EXPERIENCES_X_MENU = "9130"
 
-    def __init__(self, url: str, username: str, password: str) -> None:
+    def __init__(self, url: str, credentials: dict[str, str]) -> None:
         self.url = url
-        self.session: requests.Session = self.login_and_create_session(
-            username, password
-        )
+        self.session: requests.Session = self.login_and_create_session(credentials)
         if self.session is None:
             raise Exception("Failed to log in and create session.")
 
     def login_and_create_session(
-        self, username: str, password: str
+        self, credentials: dict[str, str]
     ) -> Optional[requests.Session]:
         session = requests.Session()
         login_url = f"{self.url}/account/login"
-        login_data = {"Username": username, "Password": password}
-
-        response = session.post(login_url, json=login_data)
+        
+        response = session.post(login_url, json=credentials)
 
         if response.ok:
             print("Successfully logged in and created session.")

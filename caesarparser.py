@@ -14,7 +14,6 @@ class CaesarParser:
     """
     Parses the characteristics lists from Caesar API
     """
-
     def _get_fields_by_name_from_characteristics_lists(
         self, characteristics: dict[str, Any], field_names: set[str]
     ) -> Iterable[dict[str, str]]:
