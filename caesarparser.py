@@ -72,6 +72,8 @@ class CaesarParser:
                     yield from self.parse_courses(item_list)
                 case "Ervaringen":
                     yield from self.parse_experiences(item_list)
+                case "Motivation":
+                    yield from self.parse_motivation(item_list)
                 case _:
                     yield from self.parse_default_characteristics_lists(item_list)
 
@@ -100,6 +102,12 @@ class CaesarParser:
             "Profiel ervaring technieken",
             "Profiel ervaring werkzaamheden",
         }
+        yield from self._get_fields_by_name_from_characteristics_lists(
+            item_list, field_names
+        )
+
+    def parse_motivation(self, item_list: dict[str, Any]) -> Iterable[tuple[str, str]]:
+        field_names = {"Comment"}
         yield from self._get_fields_by_name_from_characteristics_lists(
             item_list, field_names
         )

@@ -35,4 +35,7 @@ def lambda_handler(event, context):
     print("Development")
     development = get_parsed_development(session, parser)
     upload.save_file("development.json", json.dumps(development))
+    print("Motivation")
+    motivation = get_parsed_motivation(session, parser)
+    upload.save_file("motivation.json", json.dumps(motivation))
     print("Done")

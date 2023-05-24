@@ -18,6 +18,7 @@ class CaesarAPI:
     ACTIVITIES_X_MENU = "9290"
     EDUCATION_X_MENU = "9140"
     EXPERIENCES_X_MENU = "9130"
+    MOTIVATION_X_MENU = "9120"
 
     def __init__(self, url: str, credentials: dict[str, str]) -> None:
         self.url = url
@@ -69,6 +70,9 @@ class CaesarAPI:
 
     def get_experiences(self) -> Optional[dict[str, Any]]:
         return self.get(self.EXPERIENCES_X_MENU)
+    
+    def get_motivation(self) -> Optional[dict[str, Any]]:
+        return self.get(self.MOTIVATION_X_MENU)
 
     def get(self, x_menu: str) -> Optional[dict[str, Any]]:
         headers = {

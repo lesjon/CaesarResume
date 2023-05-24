@@ -94,6 +94,12 @@ def get_parsed_development(
     characteristics_lists = session.get_development()
     return [item for item in parser.parse_charachteristics_lists(characteristics_lists)]
 
+def get_parsed_motivation(
+    session: CaesarAPI, parser: CaesarParser
+) -> list[dict[str, str]]:
+    characteristics_lists = session.get_motivation()
+    return [item for item in parser.parse_charachteristics_lists(characteristics_lists)]
+
 def main():
     credentials = load_credentials()
     session = CaesarAPI(API_PATH, credentials)
@@ -127,6 +133,9 @@ def main():
         print(f"item: {item}")
     print("Development")
     for item in get_parsed_development(session, parser):
+        print(f"item: {item}")
+    print("Motivation")
+    for item in get_parsed_motivation(session, parser):
         print(f"item: {item}")
 
 
