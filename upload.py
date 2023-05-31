@@ -2,11 +2,11 @@ import json
 from typing import Any
 import boto3
 
-def json(file_name, data: Any):
+def json_file(file_name, data: Any):
     data_str = json.dumps(data)
-    binary(file_name, data_str)
+    binary_file(file_name, data_str)
 
-def binary(file_name, data: str | bytes):
+def binary_file(file_name, data: str | bytes):
     s3 = boto3.client("s3")
     bucket_name = "resume.leonklute.nl"
     s3.put_object(Bucket=bucket_name, Key=file_name, Body=data)
