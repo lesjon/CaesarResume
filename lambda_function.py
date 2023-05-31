@@ -43,3 +43,4 @@ def lambda_handler(event, context):
     resume_name, resume = session.download_document(document['Serial no.'])
     upload.binary_file("resume.docx", resume)
     print("Done")
+    return {"statusCode": 200}
