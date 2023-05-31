@@ -2,6 +2,7 @@ import json
 from typing import Iterable, Any
 import re
 
+
 # function to merge two dictionaries, executin the merge function on the values when a key is present in both dictionaries
 def _merge_two_dicts(x, y, merge_function):
     z = x.copy()
@@ -10,10 +11,12 @@ def _merge_two_dicts(x, y, merge_function):
         z[key] = merge_function(x[key], y[key])
     return z
 
+
 class CaesarParser:
     """
     Parses the characteristics lists from Caesar API
     """
+
     def _get_fields_by_name_from_characteristics_lists(
         self, characteristics: dict[str, Any], field_names: set[str]
     ) -> Iterable[dict[str, str]]:
@@ -31,7 +34,9 @@ class CaesarParser:
                     field = item["values"][field_id]["value"]
                     if caption == "Waarde":
                         field = _remove_prefix_code(field)
-                    education = _merge_two_dicts(education, {caption: field}, lambda x, y: x +y)
+                    education = _merge_two_dicts(
+                        education, {caption: field}, lambda x, y: x + y
+                    )
             educations.append(education)
         return educations
 
@@ -111,3 +116,14 @@ class CaesarParser:
         yield from self._get_fields_by_name_from_characteristics_lists(
             item_list, field_names
         )
+
+    def parse_documents(self, documents: dict[str, Any]) -> Iterable[tuple[str, str]]:
+        parsed_documents = []
+        field_defs = documents["list"]["set"]["fieldDefs"]
+        for item in documents["list"]["items"]:
+            document = dict()
+            for field_def in field_defs:
+                caption = field_def["caption"]
+                document.update({caption: item["values"][str(field_def["no"])]["value"]})
+            parsed_documents.append(document)
+        return parsed_documents

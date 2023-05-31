@@ -1,7 +1,10 @@
+from datetime import date
 import dotenv
 import os
 import json
 from typing import Any
+
+import requests
 
 from caesarconnection import CaesarAPI
 from caesarparser import CaesarParser
@@ -100,6 +103,19 @@ def get_parsed_motivation(
     characteristics_lists = session.get_motivation()
     return [item for item in parser.parse_charachteristics_lists(characteristics_lists)]
 
+def get_parsed_documents(
+    session: CaesarAPI, parser: CaesarParser
+) -> list[dict[str, str]]:
+    documents_lists = session.get_documents()
+    return [item for item in parser.parse_documents(documents_lists)]
+
+def get_latest_document(
+    session: CaesarAPI, parser: CaesarParser
+) -> str:
+    documents = get_parsed_documents(session, parser)
+    sorted_documents = sorted(documents, key=lambda k: date.fromisoformat(k['Date']))
+    return sorted_documents[-1]
+
 def main():
     credentials = load_credentials()
     session = CaesarAPI(API_PATH, credentials)
@@ -137,6 +153,11 @@ def main():
     print("Motivation")
     for item in get_parsed_motivation(session, parser):
         print(f"item: {item}")
+    document = get_latest_document(session, parser)
+    print(f"item: {document}")
+    resume_name, resume = session.download_document(document['Serial no.'])
+    with open("resume.docx", "wb") as docx_out:
+        docx_out.write(resume)
 
 
 if __name__ == "__main__":
