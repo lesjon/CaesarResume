@@ -42,4 +42,4 @@ jobs:
         aws-region: ${{ secrets.AWS_REGION }}          
     - name: Upload to S3
       run: |
-        aws s3 sync ./dist s3://${{ secrets.AWS_BUCKET}/ --acl bucket-owner-full-control --delete
+        aws s3 sync ./dist s3://${{ secrets.AWS_BUCKET }}/ --delete
