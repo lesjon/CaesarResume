@@ -33,7 +33,10 @@ jobs:
       with:
         name: ResumeLambda
         path: ./dist
-    
+    - name: Zip for deployment
+      run: |
+        mkdir deploy
+        zip -r deploy/lambda.zip dist
     - name: Configure AWS credentials from Production account
       uses: aws-actions/configure-aws-credentials@v2
       with:
@@ -42,4 +45,4 @@ jobs:
         aws-region: ${{ secrets.AWS_REGION }}          
     - name: Upload to S3
       run: |
-        aws s3 sync ./dist s3://${{ secrets.AWS_BUCKET }} --delete
+        aws s3 sync ./deploy s3://${{ secrets.AWS_BUCKET }} --delete
