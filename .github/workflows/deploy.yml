@@ -36,7 +36,8 @@ jobs:
     - name: Zip for deployment
       run: |
         mkdir deploy
-        zip -r deploy/lambda.zip dist
+        cd dist
+        zip -r ../deploy/lambda.zip .
     - name: Configure AWS credentials from Production account
       uses: aws-actions/configure-aws-credentials@v2
       with:
