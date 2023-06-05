@@ -1,4 +1,5 @@
 from datetime import date
+import time
 import dotenv
 import os
 import json
@@ -117,6 +118,7 @@ def get_latest_document(
     return sorted_documents[-1]
 
 def main():
+    start = time.time()
     credentials = load_credentials()
     session = CaesarAPI(API_PATH, credentials)
     parser = CaesarParser()
@@ -158,6 +160,9 @@ def main():
     resume_name, resume = session.download_document(document['Serial no.'])
     with open("resume.docx", "wb") as docx_out:
         docx_out.write(resume)
+    end = time.time()
+    print(f"Time taken: {end - start}")
+    return end - start
 
 
 if __name__ == "__main__":
